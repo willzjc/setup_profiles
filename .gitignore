@@ -1,0 +1,6 @@
+*log
+hadoop/archive
+hadoop/archive/*
+*.pyc
+.code
+.idea
