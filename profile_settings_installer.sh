@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Setting profile config"
 ## Git
-git config --global user.email willzjc@gmail.com
+# git config --global user.email willzjc@gmail.com
 git config --global user.name willzjc
 # git config --global push.default current                      # Push current branch upstream always
 git config --global credential.helper store                     # configure credential storage

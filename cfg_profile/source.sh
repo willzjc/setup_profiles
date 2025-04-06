@@ -65,3 +65,36 @@ if [ $(uname -s) = "Darwin" ] ; then
 }
 fi
 
+
+gittree() {
+  # Get only the files changed in the latest commit
+  local changed_files=$(git diff-tree --no-commit-id --name-only -r HEAD)
+
+  # Check if any files were changed
+  if [ -z "$changed_files" ]; then
+    echo "No files were changed in the latest commit."
+    return 0
+  fi
+
+  # Check if tree command is available
+  if command -v tree &> /dev/null; then
+    # Create a temporary file to store the list of changed files
+    local temp_file=$(mktemp)
+    
+    # Write each changed file path to the temp file
+    echo "$changed_files" > "$temp_file"
+    
+    echo "Files changed in the latest commit:"
+    # Use tree command with fromfile option to show the actual structure without temp directory in the output
+    tree --fromfile "$temp_file"
+    
+    # Clean up
+    rm "$temp_file"
+  else
+    # Fallback if tree command is not available
+    echo "Files changed in the latest commit:"
+    echo "$changed_files" | sort | sed 's/^/├── /'
+    echo "└── (Install 'tree' command for better visualization)"
+  fi
+}
+
