@@ -100,9 +100,7 @@ gittree() {
 
 
 # Detect if running under WSL
-if grep -qi microsoft /proc/version; then
+if [[ -f /proc/version ]] && grep -qi microsoft /proc/version; then
   export BROWSER="wslview"
   export LIBGL_ALWAYS_SOFTWARE=1
 fi
-
-
