@@ -3,15 +3,15 @@ echo "Setting profile config"
 ## Git
 # git config --global user.email willzjc@gmail.com
 git config --global user.name willzjc
-# git config --global push.default current                      # Push current branch upstream always
-git config --global credential.helper store                     # configure credential storage
+# git config --global push.default current       # Push current branch upstream always
+git config --global credential.helper cache     # Cache credentials in memory for use by future git commands
 git config --global http.sslverify false
 
 # Set vim preferences
+echo "Setting vim config"
 mkdir -p ~/.vim/undodir
 mkdir -p ~/.vim/swp
 mkdir -p ~/.vim/backupdir
-
 echo """set paste
 set hlsearch
 syntax on
@@ -20,7 +20,7 @@ set directory=~/.vim/swp
 set undodir=~/.vim/undodir
 """ > ~/.vimrc
 
-echo "Installing source"
+echo "Installing source profile"
 mkdir -p ~/.sourceprofile
 
 if [ $(uname -s) = "Darwin" ] ; then
@@ -33,20 +33,20 @@ mkdir -p ~/.sourceprofile
 cp ./cfg_profile/source.sh ~/.sourceprofile/source.sh
 cp ./cfg_profile/dircolors  ~/.sourceprofile/dircolors
 
-echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.zshrc
-echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.bashrc
-
-# Install oh my zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-echo "Copying zsh custom theme - $PWD/oh-my-zsh/customtheme.zsh-theme ~/.oh-my-zsh/custom/themes/customtheme.zsh-theme"
-cp $PWD/oh-my-zsh/customtheme.zsh-theme ~/.oh-my-zsh/custom/themes/customtheme.zsh-theme
-
-# Replace ZSH_THEME in ~/.zshrc
-echo "Setting ZSH_THEME to customtheme in ~/.zshrc"
-sed -i.bak 's/^ZSH_THEME=".*"/ZSH_THEME="customtheme"/' ~/.zshrc
-
-# Set Zsh as default shell if not already
-if [ "$SHELL" != "$(which zsh)" ]; then
-  echo "Changing default shell to zsh..."
-  chsh -s "$(which zsh)"
+# Add source to shell config files only if not already present
+if ! grep -q "source ~/.sourceprofile/source.sh" ~/.zshrc; then
+  echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.zshrc
+  echo "Added source to ~/.zshrc"
+else
+  echo "Source already exists in ~/.zshrc"
 fi
+
+if ! grep -q "source ~/.sourceprofile/source.sh" ~/.bashrc; then
+  echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.bashrc
+  echo "Added source to ~/.bashrc"
+else
+  echo "Source already exists in ~/.bashrc"
+fi
+
+# Call the Oh My Zsh installer script
+./oh-my-zsh-installer.sh
