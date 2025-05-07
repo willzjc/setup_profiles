@@ -44,3 +44,9 @@ cp $PWD/oh-my-zsh/customtheme.zsh-theme ~/.oh-my-zsh/custom/themes/customtheme.z
 # Replace ZSH_THEME in ~/.zshrc
 echo "Setting ZSH_THEME to customtheme in ~/.zshrc"
 sed -i.bak 's/^ZSH_THEME=".*"/ZSH_THEME="customtheme"/' ~/.zshrc
+
+# Set Zsh as default shell if not already
+if [ "$SHELL" != "$(which zsh)" ]; then
+  echo "Changing default shell to zsh..."
+  chsh -s "$(which zsh)"
+fi
