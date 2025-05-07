@@ -35,3 +35,12 @@ cp ./cfg_profile/dircolors  ~/.sourceprofile/dircolors
 
 echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.zshrc
 echo -e "\nsource ~/.sourceprofile/source.sh\n" >> ~/.bashrc
+
+# Install oh my zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+echo "Copying zsh custom theme - $PWD/oh-my-zsh/customtheme.zsh-theme ~/.oh-my-zsh/custom/themes/customtheme.zsh-theme"
+cp $PWD/oh-my-zsh/customtheme.zsh-theme ~/.oh-my-zsh/custom/themes/customtheme.zsh-theme
+
+# Replace ZSH_THEME in ~/.zshrc
+echo "Setting ZSH_THEME to customtheme in ~/.zshrc"
+sed -i.bak 's/^ZSH_THEME=".*"/ZSH_THEME="customtheme"/' ~/.zshrc
